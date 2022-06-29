@@ -31,6 +31,10 @@ app.use(xss());
 // log every request in development environment
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
+// template engine
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
 // main routes
 
 // If any route not found, this routes gets executed
