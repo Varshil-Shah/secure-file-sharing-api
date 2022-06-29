@@ -1,15 +1,31 @@
-const express = require("express");
+const dotenv = require("dotenv");
+const fs = require("fs");
 
-const path = require("path");
+if (!fs.existsSync("uploads/")) {
+  fs.mkdirSync("uploads");
+}
 
-const app = express();
+process.on("uncaughtException", (error) => {
+  console.log("UNCAUGHT EXCEPTION | SHUTTING DOWN...");
+  if (process.env.NODE_ENV === "development") console.log(error);
+  process.exit(1);
+});
 
-app.use(express.json());
+dotenv.config({
+  path: "./config.env",
+});
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+const app = require("./app");
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Listening on port", PORT);
+});
+
+process.on("unhandledRejection", (error) => {
+  console.log(`UNHANDLED REJECTION | SHUTTING DOWN ...`);
+  if (process.env.NODE_ENV === "development") console.log(error);
+  server.close(() => {
+    process.exit(1);
+  });
 });

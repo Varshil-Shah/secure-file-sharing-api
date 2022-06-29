@@ -1,9 +1,11 @@
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const rateLimiter = require("express-rate-limiter");
+const expressRateLimiter = require("express-rate-limit");
 const xss = require("xss-clean");
 const mongoSanitizer = require("express-mongo-sanitize");
+
+const path = require("path");
 
 const app = express();
 
@@ -11,7 +13,7 @@ const app = express();
 app.use(helmet());
 
 // limit request for same API for particular user
-const limiter = rateLimiter({
+const limiter = expressRateLimiter({
   windowMs: 60 * 60 * 1000, // 1hr
   max: 100,
   message: "To many request from this IP, please try again later!",
@@ -36,6 +38,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // main routes
+app.use("/api", (req, res, next) => {});
 
 // If any route not found, this routes gets executed
 app.all("*", (req, res, next) => {
