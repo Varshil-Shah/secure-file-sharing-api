@@ -1,4 +1,5 @@
 const File = require("../models/file-model");
+const path = require("path");
 
 exports.viewFile = async (req, res) => {
   try {
@@ -15,10 +16,17 @@ exports.viewFile = async (req, res) => {
       });
     }
 
+    console.log(file);
+    const [filename] = file.name.split("--");
+
     res.status(200).json({
       status: "success",
       data: {
-        data: file,
+        filename: `${filename}${path.extname(file.name)}`,
+        size: `${Math.round(file.size / 1024)} KB`,
+        createdAt: new Date(file.createdAt).toLocaleString(),
+        downloadCounts: file.count,
+        download: `${process.env.APP_BASE_URL}/api/v1/download/${file._id}`,
       },
     });
   } catch (error) {
