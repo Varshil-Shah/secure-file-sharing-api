@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const fs = require("fs");
 
@@ -14,6 +15,21 @@ process.on("uncaughtException", (error) => {
 dotenv.config({
   path: "./config.env",
 });
+
+const databaseUrl = process.env.MONGO_DB_URL.replace(
+  "<PASSWORD>",
+  process.env.MONGO_DB_PASSWORD
+);
+
+mongoose
+  .connect(databaseUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Database connected successfully!"))
+  .catch((error) =>
+    console.log(`Error occured while connecting database: ${error}`)
+  );
 
 const app = require("./app");
 
