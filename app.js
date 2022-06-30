@@ -7,6 +7,10 @@ const mongoSanitizer = require("express-mongo-sanitize");
 
 const path = require("path");
 
+const uploadRouter = require("./routes/upload-router");
+const viewRouter = require("./routes/view-router");
+const downloadRouter = require("./routes/download-router");
+
 const app = express();
 
 // set security http headers
@@ -38,7 +42,9 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // main routes
-app.use("/api", (req, res, next) => {});
+app.use("/api/v1/upload", uploadRouter);
+app.use("/api/v1/download", downloadRouter);
+app.use("/api/v1/view", viewRouter);
 
 // If any route not found, this routes gets executed
 app.all("*", (req, res, next) => {
