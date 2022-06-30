@@ -43,6 +43,7 @@ exports.uploadFile = (req, res) => {
       name: req.file.filename,
       path: req.file.path,
       size: req.file.size,
+      password: req.body.password,
     });
 
     console.log(file);
